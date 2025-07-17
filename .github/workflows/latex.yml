@@ -1,0 +1,36 @@
+name: Build LaTeX Document
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX documents
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            main.tex
+            SI.tex
+          latexmk_use_xelatex: true
+          args: "-pdf -interaction=nonstopmode -shell-escape"
+      
+      - name: Upload main.pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-pdf
+          path: main.pdf
+      
+      - name: Upload SI.pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: si-pdf
+          path: SI.pdf
